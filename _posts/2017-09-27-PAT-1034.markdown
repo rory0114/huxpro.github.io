@@ -20,14 +20,12 @@ tags:
 ---
 
 ## 程序
-
-<pre><code>
-#include&ltstdio.h&rt
-#include&ltiostream&rt
-#include&ltalgorithm&rt
-#include&ltmap&rt
-#include&ltstring&rt
-#include&ltvector&rt
+<pre><code>#include<stdio.h>
+#include<iostream>
+#include<algorithm>
+#include<map>
+#include<string>
+#include<vector>
 using namespace std;
 int n,ther;
 const int maxn=2005;
@@ -87,7 +85,9 @@ void init()//初始化
   }
 }
 int main()
-{ 
+{
+  
+
   init();
   string name1,name2;
   int t;
@@ -137,6 +137,8 @@ int main()
     }
   }
   sort(gang,gang+cnt,cmp);//对团伙老大排序
+  
+
   int ccc=0;
   for(int i=0;i<cnt;i++)//筛选
   {
@@ -153,8 +155,10 @@ int main()
       cout<<int2name[gang[i].leader];
       printf(" %d\n",gang[i].number);
     }
-  }  
+  }
+  
   return 0;
+
 }
 
 </code></pre>

@@ -1,0 +1,175 @@
+---
+layout:     post
+title:      "PAT1034"
+subtitle:   "用并查集解决A1034"
+date:       2017-09-27 9:00:00
+author:     "李彦瑞"
+header-img: "img/post-pat.jpg"
+catalog: true
+tags:
+    - PAT
+---
+
+> “PAT1034 ”
+
+
+## 题目分析
+
+算法笔记上是用图的遍历来做的，但我认为用并查集做也可以，就使用了并查集。
+<p id = "build"></p>
+---
+
+## 程序
+
+{% highlight html linenos %}
+#include<stdio.h>
+#include<iostream>
+#include<algorithm>
+#include<map>
+#include<string>
+#include<vector>
+using namespace std;
+int n,ther;
+const int maxn=2005;
+int p[maxn];
+map<string,int> name2int;
+map<int,string> int2name;
+int father[maxn];
+int cnt=0;
+
+int findfather(int a)//并查集操作
+{
+  int x=a,m;
+  while(father[a]!=a)
+  {
+    a=father[a];
+  }
+  while(father[x]!=x)
+  {
+    m=father[x];
+    father[x]=a;
+    x=m;
+  }
+  return a;
+}
+struct Gang//定义团伙
+{
+  int leader;
+  int number;
+  int weight;
+} gang[maxn];
+void Union(int a,int b)//合并
+{
+  int faA=findfather(a);
+  int faB=findfather(b);
+  if(faA!=faB)
+  {
+     father[faA]=faB;
+  }
+}
+
+int num;
+bool cmp(Gang a,Gang b)//比较对团伙老大排序
+{
+  return int2name[a.leader]<int2name[b.leader];
+}
+void init()//初始化
+{
+  for(int i=0;i<maxn;i++)
+  {
+    father[i]=i;
+  }
+  fill(p,p+maxn,0);
+  for(int i=0;i<maxn;i++)
+  {
+    gang[i].number=0;
+    gang[i].weight=0;
+  }
+}
+int main()
+{
+  
+
+  init();
+  string name1,name2;
+  int t;
+  int id=0;
+  scanf("%d%d",&n,&ther);
+  for(int i=0;i<n;i++)//输入同时进行联合操作
+  {
+    cin>>name1>>name2>>t;
+    if(name2int.find(name1)==name2int.end())
+    {
+      name2int[name1]=id;
+      int2name[id]=name1;
+      id++;
+    }
+    if(name2int.find(name2)==name2int.end())
+    {
+      name2int[name2]=id;
+      int2name[id]=name2;
+      id++;
+    }
+    p[name2int[name1]]+=t;
+    p[name2int[name2]]+=t;
+    Union(name2int[name1],name2int[name2]);
+  }
+  int ma,boss;
+  num=name2int.size();
+  for(int i=0;i<num;i++)//确保所有都路径压缩
+  {int m=findfather(i);}
+  for(int i=0;i<num;i++)//寻找所有BOSS
+  {
+    
+    if(father[i]==i)
+    {
+      ma=p[i];
+      boss=i;
+      for(int j=0;j<num;j++)
+      {
+        if(father[j]==i)
+        {
+          gang[cnt].number++;
+          gang[cnt].weight+=p[j];
+          if(p[j]>ma) boss=j;
+        }
+      }
+      gang[cnt].leader=boss;
+      cnt++;
+    }
+  }
+  sort(gang,gang+cnt,cmp);//对团伙老大排序
+  
+
+  int ccc=0;
+  for(int i=0;i<cnt;i++)//筛选
+  {
+    if(gang[i].number>2&&gang[i].weight/2>ther)
+    {
+      ccc++;
+    }
+  }
+    printf("%d\n",ccc);
+  for(int i=0;i<cnt;i++)//输出
+  {
+    if(gang[i].number>2&&gang[i].weight/2>ther)
+    {
+      cout<<int2name[gang[i].leader];
+      printf(" %d\n",gang[i].number);
+    }
+  }
+  
+  return 0;
+
+}
+{% endhighlight %}
+
+
+## 分析
+有一个点无法通过<br/>
+最后的筛选和输出有一点重复。
+
+
+——  记于 2017.9.27
+
+

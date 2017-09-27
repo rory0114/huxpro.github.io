@@ -175,7 +175,7 @@ int main()
   return 0;
 }
 </code></pre>
-##PAT1123
+## PAT1123
 <pre><code>#include< iostream>
 #include< stdio.h>
 #include < algorithm>
@@ -252,7 +252,7 @@ void insert(node* &root,int v)
   }
   else
   {
-    if(v<root->data)
+    if(v< root->data)
     {
       insert(root->lchild,v);
       updateHeight(root);

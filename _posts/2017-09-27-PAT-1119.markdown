@@ -1,0 +1,105 @@
+---
+layout:     post
+title:      "PAT1119"
+subtitle:   "Pre- and Post-order Traversals (30)"
+date:       2017-09-27 15:00:00
+author:     "李彦瑞"
+header-img: "img/post-pat.jpg"
+catalog: true
+tags:
+    - PAT
+---
+
+> “PAT1119 ”
+
+
+## 题目分析
+题目名称“Pre- and Post-order Traversals”<br/>
+
+一般情况下用一个前序排列和一个后序排列是无法确定一个二叉树的，因此想到什么情况下这两者可以确定唯一的二叉树是关键。
+<p id = "build"></p>
+---
+
+## 程序
+
+<pre><code>
+#include< stdio.h>
+#include< iostream>
+#include< queue>
+using namespace std;
+const int maxn=35;
+int pre[maxn];
+int pos[maxn];
+int m;
+int flag=0;
+int ct=0;
+struct node
+{
+  int v;
+  node* lchild,*rchild;
+};
+node* create(int pol,int por,int prl,int prr)
+{
+  node* temp;
+  int leftnum;
+  int c;
+  if(pol>por) return NULL;
+  else
+  {
+    temp=new node;
+    temp->v=pos[por];
+  }
+  for(c=prl;c<=prr;c++)
+  {
+    if(pre[c]==pos[por-1]) break;
+  }
+   leftnum=c-prl-1;
+   if(!leftnum&&(por-pol)!=0) flag=1;
+   temp->lchild=create(pol,pol+leftnum-1,prl+1,prl+1+leftnum-1);
+   temp->rchild=create(pol+leftnum,por-1,prl+leftnum+1,prr);
+   return temp;
+}
+
+void zhongxu(node* root)
+{
+  if(root==NULL) return;
+  else
+  {
+    zhongxu(root->lchild);
+    ct++;
+    if(ct<m)
+    printf("%d ",root->v);
+    else printf("%d\n",root->v);
+    zhongxu(root->rchild);
+  }
+  return;
+  
+}
+int main()
+{
+
+  scanf("%d",&m);
+  for(int i=1;i<=m;i++)
+  {
+    scanf("%d",&pre[i]);
+  }
+  for(int i=1;i<=m;i++)
+  {
+    scanf("%d",&pos[i]);
+  }
+  node* root=create(1,m,1,m);
+  if(flag==1)
+    printf("No\n");
+  else
+    printf("Yes\n");
+  zhongxu(root);
+
+  return 0;
+}
+</code></pre>
+
+
+确定是否是唯一的二叉树，其实是在看是不是每一个非叶子节点都有两个子节点，只有有两个子节点，当只有一个子节点时，该子节点可能是左儿子，也可能是右儿子。
+——  记于 2017.9.27
+
+

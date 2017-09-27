@@ -21,7 +21,7 @@ tags:
 
 ## 程序
 
-...
+<pre><code>
 #include<stdio.h>
 #include<iostream>
 #include<algorithm>
@@ -162,7 +162,8 @@ int main()
   return 0;
 
 }
-...
+
+</code></pre>
 
 
 ## 分析

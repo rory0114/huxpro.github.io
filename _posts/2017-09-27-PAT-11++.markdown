@@ -293,7 +293,7 @@ void BFS(node* root)
 {
   int count=0;
   node* temp;
-  queue<node*>q;
+  queue< node*>q;
   q.push(root);
   while(!q.empty())
   {
@@ -340,7 +340,7 @@ int main()
 }
 </code></pre>
 
-##PAT1122
+## PAT1122
 <pre><code>#include< stdio.h>
 #include< iostream>
 #include< algorithm>

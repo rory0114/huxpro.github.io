@@ -1,0 +1,408 @@
+---
+layout:     post
+title:      "PAT题目"
+subtitle:   "算法笔记上没有的，这几年的真题"
+date:       2017-09-27 9:00:00
+author:     "李彦瑞"
+header-img: "img/post-pat.jpg"
+catalog: true
+tags:
+    - PAT
+---
+
+> “好久之前做的了，也记不清了，就把源码发上来，大家想看的看一下，这些在算法笔记上都没有，都是自己写的。”
+
+
+## PAT1130
+
+<pre><code>#include< stdio.h>
+#include< iostream>
+#include< string>
+#include< vector>
+using namespace std;
+int m;
+vector<string> expression;
+const int maxn=25;
+struct node
+{
+  string val;
+  int lchild,rchild;
+
+}Node[maxn];
+bool root[maxn];
+int rot;
+void init()
+{
+  for(int i=0;i<maxn;i++)
+  {
+    Node[i].lchild=Node[i].rchild=-1;
+    root[i]=true;
+  }
+}
+void output(int v)
+{
+  if(Node[v].lchild!=-1||Node[v].rchild!=-1)
+  {
+    if(v!=rot)
+    expression.push_back("(");
+  }
+  if(Node[v].lchild!=-1)
+  {
+    output(Node[v].lchild);
+  }
+  expression.push_back(Node[v].val);
+  if(Node[v].rchild!=-1)
+  {
+    output(Node[v].rchild);
+  }
+  if(Node[v].lchild!=-1||Node[v].rchild!=-1)
+  {
+    if(v!=rot)
+    expression.push_back(")");
+  }
+}
+void prt()
+{
+  for(int i=0;i<expression.size();i++)
+  {
+    cout<<expression[i];    
+  }
+}
+int main()
+{
+  
+  string str;
+  int l1,r1;
+  init();
+  scanf("%d",&m);
+  for(int i=1;i<=m;i++)
+  {
+    cin>>Node[i].val>>Node[i].lchild>>Node[i].rchild;
+  }
+  for(int i=1;i<=m;i++)
+  {
+    if(Node[i].lchild!=-1)
+      root[Node[i].lchild]=false;
+    if(Node[i].rchild!=-1)
+      root[Node[i].rchild]=false;
+  }
+  for(int i=1;i<=m;i++)
+  {
+    if (root[i]==true)
+    {
+      rot=i;
+      break;
+    }
+  }
+  output(rot);
+  prt();
+  return 0;
+}
+
+
+</code></pre>
+---
+
+## PAT1129
+<pre><code>#include< algorithm>
+#include< stdio.h>
+#include< iostream>
+using namespace std;
+int n,m;
+const int maxn=50005;
+int ans[13];
+int cnum=0;
+int hashtable[maxn]={0};
+int vis[maxn]={0};
+int now;
+bool cmp(int a,int b)
+{  
+  
+  if(hashtable[a]!=hashtable[b])
+    return hashtable[a]>hashtable[b];
+  else return a<b;
+}
+
+int main()
+{
+  
+  fill(ans,ans+13,0);
+  scanf("%d%d",&n,&m);
+  for(int i=0;i<n;i++)
+  {
+    scanf("%d",&now);
+    hashtable[now]++;
+    
+    if(cnum>0)
+    {
+      printf("%d:",now);
+      for(int j=0;j<cnum;j++)
+      {
+        printf(" %d",ans[j]);
+      }
+      printf("\n");
+    }
+  
+    
+    if(vis[now]==1)
+    {
+      sort(ans,ans+cnum,cmp);
+    }
+    else
+    {
+      if (cnum<m)
+      {
+        
+        ans[cnum]=now;  
+        vis[now]=1;
+        cnum++;
+        sort(ans,ans+cnum,cmp);
+
+      }
+      else
+      {
+        ans[cnum]=now;  
+        sort(ans,ans+cnum+1,cmp);
+        if(ans[cnum]!=now)
+        {
+          vis[now]=1;
+          vis[ans[cnum]]=0;
+        }
+      }
+    }
+    
+    
+  }
+
+  return 0;
+}
+</code></pre>
+##PAT1123
+<pre><code>#include< iostream>
+#include< stdio.h>
+#include < algorithm>
+#include< queue>
+using namespace std;
+int fend=0,fagain=0;
+struct node
+{
+  int data,height;
+  node  *lchild,*rchild;
+} *root;
+
+node*newnode(int v)
+{
+  node *Node=new node;
+  Node->data=v;
+  Node->height=1;
+  Node->lchild=Node->rchild=NULL;
+  return Node;
+
+}
+int getHeight(node *root)
+{
+  if(root==NULL)
+  {
+    return 0;
+  }
+  else
+  {
+    return root->height;
+  }
+}
+void updateHeight(node* root)
+{
+  root->height= max(getHeight(root->lchild),getHeight(root->rchild))+1;
+}
+
+
+int m;//m个点
+int getBalanceFactor(node* root)
+{
+  return getHeight(root->lchild)-getHeight(root->rchild);
+}
+
+void R(node *&root)
+{
+  node* temp;
+  temp=root->lchild;
+  root->lchild=temp->rchild;//这一行不要忘
+  temp->rchild=root;
+  updateHeight(root);
+  updateHeight(temp);//这两行很重要并且要注意顺序
+  root=temp;
+}
+void L(node *&root)
+{
+  node* temp;
+  temp=root->rchild;
+  root->rchild=temp->lchild;
+  temp->lchild=root;
+  updateHeight(root);
+  updateHeight(temp);//这两行很重要并且要注意顺序
+  root=temp;
+}
+
+void insert(node* &root,int v)
+{
+  int balance;
+  if(root==NULL)
+  {
+    node* temp=newnode(v);
+    root=temp;
+    return ;
+  }
+  else
+  {
+    if(v<root->data)
+    {
+      insert(root->lchild,v);
+      updateHeight(root);
+      if(getBalanceFactor(root)==2)
+      {
+        if(getBalanceFactor(root->lchild)==1)//LL
+        {
+          R(root);
+        }
+        else if(getBalanceFactor(root->lchild)==-1)//LR
+        {
+          L(root->lchild);
+          R(root);
+        }
+      }
+      
+    }
+    else 
+    {
+      insert(root->rchild,v);
+      updateHeight(root);
+       if(getBalanceFactor(root)==-2)
+      {
+        if(getBalanceFactor(root->rchild)==-1)//LL
+        {
+          L(root);
+        }
+        else if(getBalanceFactor(root->rchild)==1)//LR
+        {
+          R(root->rchild);
+          L(root);
+        }
+      }
+    }
+  }
+}
+void BFS(node* root)
+{
+  int count=0;
+  node* temp;
+  queue<node*>q;
+  q.push(root);
+  while(!q.empty())
+  {
+    temp=q.front();
+    count++;
+    if(count<m)
+    {
+      printf("%d ",temp->data);
+    }
+    else
+    {
+      printf("%d\n",temp->data);
+    }
+    q.pop();
+    if(temp->lchild==NULL) fend=1;
+    else
+    {
+      q.push(temp->lchild);
+      if(fend==1) fagain=1;
+    }
+    if(temp->rchild==NULL) fend=1;
+    else
+    {
+      q.push(temp->rchild);
+      if(fend==1) fagain=1;
+    }
+  }
+  
+}
+int main()
+{
+
+  int v;
+  scanf("%d",&m);
+  for(int i=0;i<m;i++)
+  {
+    scanf("%d",&v);
+    insert(root,v);
+  }
+  BFS(root);
+  if(fagain==0) printf("YES");
+  else printf("NO");
+  return 0;
+}
+</code></pre>
+
+##PAT1122
+<pre><code>#include< stdio.h>
+#include< iostream>
+#include< algorithm>
+using namespace std;
+const int maxn=205;
+int n,m,q;
+int G[maxn][maxn];
+int temp[maxn];
+int hashtable[maxn];
+int main()
+{
+  
+  int u,v;
+  fill(G[0],G[0]+maxn*maxn,0);
+  scanf("%d%d",&n,&m);
+  for(int i=0;i<m;i++)
+  {
+    scanf("%d%d",&u,&v);
+    G[u][v]=1;
+    G[v][u]=1;
+  }
+  scanf("%d",&q);
+  for(int i=0;i<q;i++)
+  {
+    fill(hashtable,hashtable+maxn,0);
+    int k;
+    scanf("%d",&k);
+    for(int j=0;j<k;j++)
+    {
+      scanf("%d",&temp[j]);
+    }
+    if(k==n+1)
+    {
+      int jj;
+      for( jj=0;jj<n;jj++)
+      {
+        if(G[temp[jj]][temp[jj+1]]==1&&hashtable[temp[jj]]==0)
+        {
+          hashtable[temp[jj]]=1;
+        }
+        else
+        {
+          break;
+        }
+      }
+      if(temp[jj]==temp[0]&&jj==n)
+      {
+        printf("YES\n");
+      }
+      else
+        printf("NO\n");
+    }
+    else
+      printf("NO\n");
+  }
+  
+  return 0;
+}
+</code></pre>
+
+——  记于 2017.9.27
+
+

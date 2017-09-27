@@ -21,7 +21,7 @@ tags:
 #include< vector>
 using namespace std;
 int m;
-vector<string> expression;
+vector< string> expression;
 const int maxn=25;
 struct node
 {

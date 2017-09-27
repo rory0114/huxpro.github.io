@@ -98,10 +98,8 @@ int main()
   prt();
   return 0;
 }
-
-
 </code></pre>
----
+
 
 ## PAT1129
 <pre><code>#include< algorithm>

@@ -20,12 +20,12 @@ tags:
 ---
 
 ## 程序
-<pre><code>#include<stdio.h>
-#include<iostream>
-#include<algorithm>
-#include<map>
-#include<string>
-#include<vector>
+<pre><code>#include< stdio.h>
+#include< iostream>
+#include< algorithm>
+#include< map>
+#include< string>
+#include< vector>
 using namespace std;
 int n,ther;
 const int maxn=2005;

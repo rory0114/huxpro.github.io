@@ -22,14 +22,14 @@ tags:
 
 ## 程序
 
-{% highlight html linenos %}
-#include<stdio.h>
-#include<iostream>
-#include<vector>
-#include<algorithm>
+<pre><code>
+#include< stdio.h>
+#include< iostream>
+#include< vector>
+#include< algorithm>
 using namespace std;
 const int maxn=1005;
-vector<int> node[maxn];
+vector< int> node[maxn];
 int m,n,q,root;
 int vis[maxn];
 int cnt;
@@ -77,7 +77,7 @@ int main()
 
   return 0;
 }
-{% endhighlight %}
+</pre></code>
 
 
 ## 分析

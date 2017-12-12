@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "计算机视觉第一次作业小结"
-subtitle:   "用了 os getopt pyinstaller"
+subtitle:   ""
 date:       2017-12-09 18:00:00
 author:     "李彦瑞"
 header-img: "img/post-bg-2015.jpg"
@@ -13,7 +13,7 @@ tags:
 > “第一次作业”
 
 
-## 第一次作业：
+## 第一次作业：      
 
 第一次作业要求如下：
 对输入的一个彩色视频与五张以上照片，用OpenCV实现以下功能或要求: <br/>
@@ -28,13 +28,13 @@ tags:
 
 <p id = "build"></p>
 ---
-##实验环境
+##实验环境  
 
 Python3.6+opencv3
 
-##实验步骤
+##实验步骤  
 
-### 1)考虑到要使用命令行参数，所以首先了解了有关怎么读取命令行参数<br/>
+### 1)考虑到要使用命令行参数，所以首先了解了有关怎么读取命令行参数
 
 命令行参数的读取<br/>
 命令行参数的读取采用了Python中的sys模块以及getopt模块<br/>
@@ -42,13 +42,13 @@ Python3.6+opencv3
 	if __name__ == "__main__":
 	main(sys.argv[1:])
 	
-以上两行程序表示当该文件被当做主函数运行时，调用main函数并把sys.argv中的参数传入main函数，其中sys.argv[0]是打开文件的文件名，之后的为命令行参数。
+以上两行程序表示当该文件被当做主函数运行时，调用main函数并把sys.argv中的参数传入main函数，其中sys.argv[0]是打开文件的文件名，之后的为命令行参数。<br/>
 输入的sys.argv[]在main函数中被调用，调用中使用了getopt，调用方法如下
 
 	def main(argv):
 		opts,args = getopt.getopt(argv,"")
 		
-其中返回的opts为操作名，在一般的编程中可能是 –h，-o之类的字符；返回的args为操作名之后跟的参数，在本次作业中，没有操作名，因此opts返回为空，args返回为地址。
+其中返回的opts为操作名，在一般的编程中可能是 –h，-o之类的字符；返回的args为操作名之后跟的参数，在本次作业中，没有操作名，因此opts返回为空，args返回为地址。<br/>
 
 ### 2)获得了地址，接下来需要通过这个地址得到地址中的图片与视频
 
@@ -91,9 +91,9 @@ Python3.6+opencv3
 
 ### 3)获得文件后用opencv将图片和视频播放，并且完成要求
 
-获得文件地址列表为imglist，vidlist
-将两者分别传入处理函数imgprocess和vidprocess中
-定义imgprocess和vidprocess如下
+获得文件地址列表为imglist，vidlist<br/>
+将两者分别传入处理函数imgprocess和vidprocess中<br/>
+定义imgprocess和vidprocess如下<br/>
 
 	def imgprocess(imglist):
 		
@@ -124,26 +124,41 @@ Python3.6+opencv3
 				if cv2.waitKey(1) & 0xFF == ord('q'):
 					break
 图片处理：<br/>
-由于输入的地址可能包含中文，如果含有中文用imread是无法打开的，因此在读取文件的时候采用了cv2.imdecode(np.fromfile(picd, dtype=np.uint8), 1)，这个方法可以打开地址中有中文的图像文件。
-之后进行了调整大小，然后输出，再用cv2.waitKey(1000)等待1s之后换另一张图片。
+由于输入的地址可能包含中文，如果含有中文用imread是无法打开的，因此在读取文件的时候采用了cv2.imdecode(np.fromfile(picd, dtype=np.uint8), 1)，这个方法可以打开地址中有中文的图像文件。<br/>
+之后进行了调整大小，然后输出，再用cv2.waitKey(1000)等待1s之后换另一张图片。<br/>
 
 视频处理：<br/>
-	用videoCapture = cv2.VideoCapture(vid)将视频文件读入。
-之后用fps = videoCapture.get(cv2.CAP_PROP_FPS)获得读入视频原始的FPS以便之后的等速度输出。
-之后用success, frame = videoCapture.read() 
-获取每一帧图像，success返回是否读到，frame返回图像，之后用resize改变大小，再用cv2.putText放置文字。在放文字时，发现皱纹不能显示，网上搜索可以用freetype将中文转化成位图再放到视频上。
-之后用imshow显示图像，再cv2.waitKey(int(1000/int(fps)))等待相应的时间
+用
+
+	videoCapture = cv2.VideoCapture(vid)
+	
+将视频文件读入。<br/>
+之后用
+
+	fps = videoCapture.get(cv2.CAP_PROP_FPS)
+
+获得读入视频原始的FPS以便之后的等速度输出。<br/>
+之后用
+
+	success, frame = videoCapture.read() 
+	
+	
+获取每一帧图像，success返回是否读到，frame返回图像，之后用resize改变大小，再用cv2.putText放置文字。在放文字时，发现皱纹不能显示，网上搜索可以用freetype将中文转化成位图再放到视频上。<br/>
+之后用imshow显示图像，再
+
+	cv2.waitKey(int(1000/int(fps)))
+
+等待相应的时间<br/>
 最后增加了
-if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+	if cv2.waitKey(1) & 0xFF == ord('q'):
+					break
 使得播放一半时可以按q退出
 
 ### 4)打包py文件为exe
-使用模块pyinstaller
-在cmd中输入 pyinstaller xxx.py
-运行后生成一个文件夹，
- 
-用cmd进入这个文件夹运行 xxx.exe加上存放图片和视频的文件夹的地址可以成功运行。
+使用模块pyinstaller<br/>
+在cmd中输入 pyinstaller xxx.py<br/>
+运行后生成一个文件夹<br/>
+用cmd进入这个文件夹运行 xxx.exe加上存放图片和视频的文件夹的地址可以成功运行。<br/>
 
 
 

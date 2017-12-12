@@ -14,6 +14,7 @@ tags:
 
 
 ## 第一次作业：
+
 第一次作业要求如下：
 对输入的一个彩色视频与五张以上照片，用OpenCV实现以下功能或要求: </br>
 1)命令行格式: “xxx.exe 放视频与照片的文件夹路径” ,（例如MyMakeVideo.exe C:\input ）【假设该文件夹下只有一个avi视频文件与若干jpg文件】 </br>
@@ -29,9 +30,13 @@ tags:
 <p id = "build"></p>
 ---
 ## 实验环境
+
 Python3.6+opencv3
+
 ## 实验步骤
+
 # 1)考虑到要使用命令行参数，所以首先了解了有关怎么读取命令行参数</br>
+
 命令行参数的读取</br>
 命令行参数的读取采用了Python中的sys模块以及getopt模块</br>
 
@@ -45,7 +50,9 @@ Python3.6+opencv3
 		opts,args = getopt.getopt(argv,"")
 		
 其中返回的opts为操作名，在一般的编程中可能是 –h，-o之类的字符；返回的args为操作名之后跟的参数，在本次作业中，没有操作名，因此opts返回为空，args返回为地址。
+
 # 2)获得了地址，接下来需要通过这个地址得到地址中的图片与视频
+
 这主要用了python中的os模块
 以下是获得图片文件的程序：
 
@@ -82,7 +89,9 @@ Python3.6+opencv3
 令imglist为返回的地址的列表
 
 视频文件的获取方法类似。
+
 # 3)获得文件后用opencv将图片和视频播放，并且完成要求
+
 获得文件地址列表为imglist，vidlist
 将两者分别传入处理函数imgprocess和vidprocess中
 定义imgprocess和vidprocess如下
